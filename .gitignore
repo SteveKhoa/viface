@@ -1,0 +1,14 @@
+__pycache__
+.DS_Store
+.venv
+benchmark_results/*
+!benchmark_results/.gitkeep
+dataset.*
+weights
+*.pickle
+lfw.tar
+lfw.embeddings.tar
+*.tar
+data.db
+*.env
+logs
