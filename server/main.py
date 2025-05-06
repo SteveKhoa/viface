@@ -10,7 +10,7 @@ from os import urandom
 from typing_extensions import Annotated
 from fastapi import FastAPI, Form, Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from config import SQLITE_PATH, SERVER_SECRET_BASE64
+from server.constant import SQLITE_PATH, SERVER_SECRET_BASE64
 from lib import opaque
 
 app = FastAPI()
@@ -154,16 +154,20 @@ def poll(
 @app.get("/jwks")
 def get_jwks():
 
-    public_keys = 
+    
+
+    public_keys = [
+
+    ]
 
     resp = {"status": "200", "keys": public_keys}
     return resp
+
+@app.get("/token")
+async def request_token(domain: str, user_id: str):
+    pass
 
 
 @app.get("/")
 def read_item():
     return {"status": "200", "detail": "hello, world!"}
-
-
-if __name__ == "__main__":
-    pass

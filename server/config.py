@@ -1,4 +1,0 @@
-import os
-
-SQLITE_PATH = os.getenv("SERVER_SQLITE_PATH")
-SERVER_SECRET_BASE64 = os.getenv("SERVER_SECRET_BASE64")
