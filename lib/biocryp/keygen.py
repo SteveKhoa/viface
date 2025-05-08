@@ -362,6 +362,18 @@ class MaskThenLockFuzzyExtractor(BaseKeygen):
                 key = urandom(self.key_length)
         return (key, keyseed)
 
+    def verify(
+        self,
+        biometric: bytes,
+        keyseed: Keyseed,
+    ) -> bool:
+        key = self._reproduce(biometric, keyseed)
+
+        if key is None:
+            return False
+        else:
+            return True
+
 
 # This doesn't work I don't know why. There's something with the error correcting codes
 # in this construction. In short, this approach is just too hard for me.
@@ -479,7 +491,6 @@ class YimingFuzzyExtractor(BaseKeygen):
             if key is None:
                 key = urandom(self.key_length)
         return (key, keyseed)
-        
 
 
 class DefaultKeygen(CanettiFuzzyExtractor):

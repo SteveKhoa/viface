@@ -3,7 +3,7 @@ import numpy as np
 import sklearn.preprocessing
 import sklearn
 import pickle
-from lib.biocryp import vars, quantizers
+from lib.biocryp import vars, quantizers, contexts
 from typing import List
 from typing import Optional
 import abc
@@ -230,6 +230,7 @@ class Static(BaseBinarizer):
                 -0.2,
                 0.2,
             )
+
             bitstring = self._to_bits(binary_label)
             binarised += bitstring
 
@@ -241,8 +242,7 @@ class Static(BaseBinarizer):
 
     def binarise(self, embedding) -> bytes:
         boolarr = self._core_binarise(embedding)
-        bytestring = self._to_bytestring(boolarr)
-        return bytestring
+        return contexts.BitString(np.array(boolarr, dtype=np.uint8)).as_bytes()
 
 
 if __name__ == "__main__":
