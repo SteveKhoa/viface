@@ -7,8 +7,8 @@ from protocol import opaque_client_registration
 import base64
 
 
-def execute_registration(cv2_image_imread, user_id: str):
-    images = biocryp_image_augmentation.execute_image_augmentation(cv2_image_imread)
+def execute_registration(cv2_image_imreads, user_id: str):
+    images = biocryp_image_augmentation.execute_image_augmentation(cv2_image_imreads)
 
     feature_vectors = []
     for image in images:

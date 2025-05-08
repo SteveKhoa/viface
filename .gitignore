@@ -12,3 +12,5 @@ lfw.embeddings.tar
 data.db
 *.env
 logs
+client/uservault/*
+!client/uservault/.gitkeep
