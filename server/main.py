@@ -9,8 +9,9 @@ import base64
 from os import urandom
 from typing_extensions import Annotated
 from fastapi import FastAPI, Form, Depends
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from server.constant import SQLITE_PATH, SERVER_SECRET_BASE64
+from fastapi.security import HTTPBearer
+from server.constant import SQLITE_PATH, SERVER_SECRET_BASE64, SIGNATURE_PUBLIC_KEY
+from server.usecases import access_token_get_consent, access_token_push
 from lib import opaque
 
 app = FastAPI()
@@ -140,32 +141,20 @@ def login(
     return resp
 
 
-@app.post("/poll")
-def poll(
-    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]
-):
-    token_client = credentials.credentials
-
-    resp = {"status": "200", "token_b64": token_client}
-    return resp
-
-
-# Service Provider gets the public keys to verify ViFace signature
-@app.get("/jwks")
-def get_jwks():
-
-    
-
-    public_keys = [
-
-    ]
-
-    resp = {"status": "200", "keys": public_keys}
-    return resp
-
-@app.get("/token")
+@app.post("/token")
 async def request_token(domain: str, user_id: str):
-    pass
+    """
+    Asynchronously create an access token request. The access token request will be pushed back to client via server send event.
+    """
+    
+    is_consent = access_token_get_consent.execute(domain, user_id)
+
+    if is_consent:
+        resp = {"status": "200"}
+    else:
+        resp = {"status": "401"}
+        
+    return resp
 
 
 @app.get("/")
