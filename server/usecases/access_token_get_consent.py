@@ -17,7 +17,4 @@ def execute(domain: str, user_id: str):
     # Call the function in `client` directly
     json_resp = in_consent_get.trigger(user_id)
 
-    if json_resp["status"] == "200":
-        return True
-    else:
-        return False
+    return json_resp
