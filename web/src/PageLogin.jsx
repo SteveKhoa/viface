@@ -6,7 +6,7 @@ import {
     STATE_FAILED,
     STATE_SUCCESS,
     STATE_WAITING,
-} from "./App";
+} from "./config";
 
 const MOCK_DOMAIN = "simpleecommerce.com"
 

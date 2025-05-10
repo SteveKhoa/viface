@@ -4,13 +4,12 @@ import WaitingPage from "./PageWaiting";
 import SuccessPage from "./PageSuccess";
 import FailedPage from "./PageFailed";
 import { useState } from "react";
-
-export const STATE_LOGIN = "state_login";
-export const STATE_WAITING = "state_waiting";
-export const STATE_SUCCESS = "state_success";
-export const STATE_FAILED = "state_failed";
-
-export const ACCESS_TOKEN_ENDPOINT = "http://localhost:8080/token";
+import {
+    STATE_LOGIN,
+    STATE_WAITING,
+    STATE_FAILED,
+    STATE_SUCCESS,
+} from "./config";
 
 function App() {
     const [state, setState] = useState(STATE_LOGIN);

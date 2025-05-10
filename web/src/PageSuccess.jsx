@@ -5,7 +5,7 @@ import EastRoundedIcon from "@mui/icons-material/EastRounded";
 
 const SuccessPage = () => {
     const handleContinue = () => {
-        console.log("Continuing to the next page...");
+        window.location.assign('https://store.hangdiathoidai.com/');
     };
 
     return (
