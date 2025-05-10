@@ -1,5 +1,11 @@
+import sys
+import os
+
+sys.path.insert(1, os.path.join(sys.path[0], "..", ".."))
+
 import cv2
 import time
+from lib.feature import dnn
 
 
 def capture_to_cv2_multiple_images():
@@ -34,15 +40,29 @@ def capture_to_cv2_single_image():
         if not ret:
             break
 
+        x, y, w, h, ok = dnn.detect_face(frame)
+
+        if ok:
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.putText(frame, "OK", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+
         cv2.imshow("Capture - Press Enter to stop", frame)
 
         if cv2.waitKey(100) == 13:  # Enter key
             captured_image = frame
             break
 
-        time.sleep(0.1)
+        time.sleep(0.01)
 
     cap.release()
+
+    cv2.waitKey(1)
     cv2.destroyAllWindows()
-    
+    cv2.waitKey(1)
+
     return captured_image
+
+
+if __name__ == "__main__":
+    capture_to_cv2_single_image()
+    time.sleep(2)
