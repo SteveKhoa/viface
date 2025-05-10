@@ -21,9 +21,9 @@ const LoginPage = ({ setState }) => {
             const urlWithParams = `${ACCESS_TOKEN_ENDPOINT}?domain=${domain}&user_id=${userID}`;
 
             const resp = await fetch(urlWithParams);
-            const content = resp.json();
+            const content = await resp.json();
 
-            if (content.status == 200) {
+            if (content.status == "200") {
                 setState(STATE_SUCCESS);
             } else {
                 setState(STATE_FAILED);
