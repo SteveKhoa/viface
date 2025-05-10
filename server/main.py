@@ -10,11 +10,23 @@ from os import urandom
 from typing_extensions import Annotated
 from fastapi import FastAPI, Form, Depends
 from fastapi.security import HTTPBearer
+from fastapi.middleware.cors import CORSMiddleware
 from server.constant import SQLITE_PATH, SERVER_SECRET_BASE64, SIGNATURE_PUBLIC_KEY
 from server.usecases import access_token_get_consent, access_token_push
 from lib import opaque
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost",
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 security = HTTPBearer()
 
@@ -141,19 +153,19 @@ def login(
     return resp
 
 
-@app.post("/token")
+@app.get("/token")
 async def request_token(domain: str, user_id: str):
     """
     Asynchronously create an access token request. The access token request will be pushed back to client via server send event.
     """
-    
+
     is_consent = access_token_get_consent.execute(domain, user_id)
 
     if is_consent:
         resp = {"status": "200"}
     else:
         resp = {"status": "401"}
-        
+
     return resp
 
 
