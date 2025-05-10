@@ -159,7 +159,17 @@ async def request_token(domain: str, user_id: str):
     Asynchronously create an access token request. The access token request will be pushed back to client via server send event.
     """
 
-    return access_token_get_consent.execute(domain, user_id)
+    json_resp = access_token_get_consent.execute(domain, user_id)
+
+    status = json_resp["status"]
+    msg = json_resp["msg"]
+
+    if status == "200":
+        access_token = os.getenv("SERVER_JWT_TEST_ACCESS_TOKEN")
+    else:
+        access_token = ""
+
+    return {"status": status, "msg": msg, "access_token": access_token}
 
 
 @app.get("/")
