@@ -21,22 +21,29 @@ def save(keyseed, user_id: str):
 
 
 def get(user_id: str):
-    with open(os.path.join(ENROLL_USER_VAULT_DIR, f"{user_id}.json"), "r") as f:
-        data = json.load(f)
+    try:
+        with open(os.path.join(ENROLL_USER_VAULT_DIR, f"{user_id}.json"), "r") as f:
+            data = json.load(f)
 
-        cipher_str = data["cipher"]
-        mask_str = data["mask"]
-        nonce_str = data["nonce"]
+            cipher_str = data["cipher"]
+            mask_str = data["mask"]
+            nonce_str = data["nonce"]
 
-        cipher = deserialize(cipher_str)
-        mask = deserialize(mask_str)
-        nonce = deserialize(nonce_str)
+            cipher = deserialize(cipher_str)
+            mask = deserialize(mask_str)
+            nonce = deserialize(nonce_str)
 
-    return (cipher, mask, nonce)
+        ok = True
+    except FileNotFoundError:
+
+        ok = False
+
+    return ((cipher, mask, nonce), ok)
 
 
 def serialize(payload: bytes) -> str:
     return base64.b64encode(payload).decode("ascii")
+
 
 def deserialize(string: str) -> bytes:
     return base64.b64decode(string)

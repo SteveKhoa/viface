@@ -1,10 +1,11 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
+import { STATE_LOGIN } from "./App";
 
-const FailedPage = () => {
+const FailedPage = ({setState}) => {
     const handleRetry = () => {
-        console.log("Retrying login...");
+        setState(STATE_LOGIN)
     };
 
     return (

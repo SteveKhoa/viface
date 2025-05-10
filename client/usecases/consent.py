@@ -23,12 +23,22 @@ def execute(user_id: str):
     feature_vector = dnn.extract_feature_vector(cv2_image_imread, enforce_detection=FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG)
     binarized_feature_vector = binarizer.binarise(feature_vector)
 
-    keyseed = out_database_keyseed.get(user_id)
-    result = keygen_fuzzy_extractor.verify(binarized_feature_vector, keyseed)
+    keyseed, ok = out_database_keyseed.get(user_id)
 
-    print("consent: result=", result)
+    if ok:
+        result = keygen_fuzzy_extractor.verify(binarized_feature_vector, keyseed)
 
-    return result
+        if result == True:
+            msg = "success"
+        else:
+            msg = "unauthorized unlock"
+    else:
+        result = False
+        msg = "cannot find user"
+
+    print("consent: result=", result, ", msg=", msg)
+
+    return result, msg
 
 
 if __name__ == "__main__":
