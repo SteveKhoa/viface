@@ -1,11 +1,47 @@
-import React from "react";
-import { Box, Typography, Button, Paper } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Typography, Button, Paper, TextField } from "@mui/material";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import {
+    ACCESS_TOKEN_ENDPOINT,
+    STATE_FAILED,
+    STATE_SUCCESS,
+    STATE_WAITING,
+} from "./App";
 
-const LoginPage = () => {
-    const requestToken = () => {
-        console.log("Logging in with ViFace...");
+const MOCK_DOMAIN = "simpleecommerce.com"
+
+const LoginPage = ({ setState }) => {
+    const [allowSignin, setAllowSignin] = useState(false);
+    const [username, setUsername] = useState("");
+
+    const signIn = (domain, userID) => {
+        (async () => {
+            setState(STATE_WAITING);
+
+            const urlWithParams = `${ACCESS_TOKEN_ENDPOINT}?domain=${domain}&user_id=${userID}`;
+
+            const resp = await fetch(urlWithParams);
+            const content = resp.json();
+
+            if (content.status == 200) {
+                setState(STATE_SUCCESS);
+            } else {
+                setState(STATE_FAILED);
+            }
+        })();
     };
+
+    const onInputChange = (event) => {
+        const username = event.target.value
+
+        setUsername(username)
+
+        if (event.target.value.length > 0) {
+            setAllowSignin(true)
+        } else {
+            setAllowSignin(false)
+        }
+    }
 
     return (
         <Box
@@ -43,10 +79,21 @@ const LoginPage = () => {
                     Our latest biometric authentication technology.
                 </Typography>
 
+                <TextField
+                    label="Username"
+                    variant="standard"
+                    fullWidth
+                    sx={{
+                        mb: 3,
+                    }}
+                    onChange={onInputChange}
+                />
+
                 <Button
                     variant="contained"
                     startIcon={<AccountCircleRoundedIcon />}
-                    onClick={requestToken}
+                    onClick={() => signIn(MOCK_DOMAIN, username)}
+                    disabled={!allowSignin}
                     sx={{
                         backgroundColor: "#2f27ce",
                         color: "#fbfbfe",
