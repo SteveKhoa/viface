@@ -16,6 +16,15 @@ binarizer = binarizers.Static()
 
 
 def execute(user_id: str):
+    keyseed, ok = out_database_keyseed.get(user_id)
+
+    if not ok:
+        result = False
+        msg = "cannot find user"
+        print("consent: result=", result, ", msg=", msg)
+
+        return result, msg
+
     cv2_image_imread = camera.capture_to_cv2_single_image()
     cv2_image_imread = cv2.cvtColor(cv2_image_imread, cv2.COLOR_BGR2RGB)
     print("consent: done capturing.")
@@ -23,18 +32,12 @@ def execute(user_id: str):
     feature_vector = dnn.extract_feature_vector(cv2_image_imread, enforce_detection=FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG)
     binarized_feature_vector = binarizer.binarise(feature_vector)
 
-    keyseed, ok = out_database_keyseed.get(user_id)
+    result = keygen_fuzzy_extractor.verify(binarized_feature_vector, keyseed)
 
-    if ok:
-        result = keygen_fuzzy_extractor.verify(binarized_feature_vector, keyseed)
-
-        if result == True:
-            msg = "success"
-        else:
-            msg = "unauthorized unlock"
+    if result == True:
+        msg = "success"
     else:
-        result = False
-        msg = "cannot find user"
+        msg = "unauthorized sign-in"
 
     print("consent: result=", result, ", msg=", msg)
 

@@ -3,9 +3,10 @@ import { Box, Typography, Button } from "@mui/material";
 import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
 import { STATE_LOGIN } from "./config";
 
-const FailedPage = ({setState}) => {
+const FailedPage = ({ setState, failedMsg, setFailedMsg }) => {
     const handleRetry = () => {
-        setState(STATE_LOGIN)
+        setFailedMsg("");
+        setState(STATE_LOGIN);
     };
 
     return (
@@ -44,10 +45,18 @@ const FailedPage = ({setState}) => {
                     variant="body1"
                     sx={{
                         color: "#050315",
-                        mb: 2,
                     }}
                 >
                     Login failed. Please try again.
+                </Typography>
+
+                <Typography
+                    variant="overline"
+                    sx={{
+                        color: "#d32f2f",
+                    }}
+                >
+                    {failedMsg}
                 </Typography>
 
                 <Button

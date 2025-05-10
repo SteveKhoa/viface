@@ -10,7 +10,7 @@ import {
 
 const MOCK_DOMAIN = "simpleecommerce.com"
 
-const LoginPage = ({ setState }) => {
+const LoginPage = ({ setState, setFailedMsg }) => {
     const [allowSignin, setAllowSignin] = useState(false);
     const [username, setUsername] = useState("");
 
@@ -27,6 +27,7 @@ const LoginPage = ({ setState }) => {
                 setState(STATE_SUCCESS);
             } else {
                 setState(STATE_FAILED);
+                setFailedMsg(content.msg)
             }
         })();
     };
