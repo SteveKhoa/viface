@@ -18,6 +18,10 @@ ENDPOINT_REGISTRATION_2 = "/opaque/registration/2"
 ENDPOINT_LOGIN_1 = "/opaque/login/1"
 ENDPOINT_LOGIN_2 = "/opaque/login/2"
 
+
+FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG = os.getenv("CLIENT_FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG") == "true"
+
+
 keygen_fuzzy_extractor = keygen.MaskThenLockFuzzyExtractor(
     input_length=512,
     key_length=16,
