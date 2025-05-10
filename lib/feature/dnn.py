@@ -48,8 +48,6 @@ def detect_face(
             max_faces=1,
         )[0]["facial_area"]
 
-        print(facial_area)
-
         x = facial_area["x"]
         y = facial_area["y"]
         w = facial_area["w"]
