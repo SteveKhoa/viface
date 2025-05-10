@@ -33,12 +33,10 @@ def get(user_id: str):
             mask = deserialize(mask_str)
             nonce = deserialize(nonce_str)
 
-        ok = True
+        return ((cipher, mask, nonce), True)
     except FileNotFoundError:
 
-        ok = False
-
-    return ((cipher, mask, nonce), ok)
+        return (None, False)
 
 
 def serialize(payload: bytes) -> str:
