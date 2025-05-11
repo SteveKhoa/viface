@@ -7,7 +7,13 @@ sys.path.insert(1, os.path.join(sys.path[0], "..", ".."))
 from lib.camera import camera
 from lib.feature import dnn
 from lib.biocryp import binarizers
-from client.constant import keygen_fuzzy_extractor, ENROLL_FROM_STATIC_DATA_DIR, ENROLL_FROM_STATIC_DATA_FLAG, TEST_USER_ID
+from client.constant import (
+    keygen_fuzzy_extractor, 
+    ENROLL_FROM_STATIC_DATA_DIR, 
+    ENROLL_FROM_STATIC_DATA_FLAG, 
+    TEST_USER_ID, 
+    FEATURE_EXTRACTOR_DNN_MODEL, 
+    FEATURE_EXTRACTOR_FACE_DETECTOR)
 from client.adapters import out_database_keyseed
 import cv2
 
@@ -26,11 +32,15 @@ def execute(user_id: str = "test_user") -> bool:
 
     cv2_image_imreads = [cv2.cvtColor(cv2_image_imread, cv2.COLOR_BGR2RGB) for cv2_image_imread in cv2_image_imreads]
 
+    print("enroll: model=", FEATURE_EXTRACTOR_DNN_MODEL)
+    print("enroll: face detector=", FEATURE_EXTRACTOR_FACE_DETECTOR)
+
     feature_vectors = []
     for im in cv2_image_imreads:
-        feature_vector, ok = dnn.extract_feature_vector(im)
+        feature_vector, ok = dnn.extract_feature_vector(im, FEATURE_EXTRACTOR_DNN_MODEL, FEATURE_EXTRACTOR_FACE_DETECTOR)
 
         if not ok:
+            print("enroll: face cannot be detected... skip.")
             continue
 
         feature_vectors += [feature_vector]

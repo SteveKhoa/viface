@@ -24,8 +24,10 @@ def extract_feature_vector(
             detector_backend=face_detector_backend,
             max_faces=1,
         )[0]["embedding"]
-    except ValueError:
+    except ValueError as e:
         # No face detected
+
+        print("extract_feature_vector: error=", e)
 
         return (None, False)
 

@@ -52,7 +52,7 @@ def capture_to_cv2_single_image():
             captured_image = frame
             break
 
-        time.sleep(0.01)
+        time.sleep(0.5)
 
     cap.release()
 

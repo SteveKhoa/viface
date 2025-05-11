@@ -7,7 +7,7 @@ sys.path.insert(1, os.path.join(sys.path[0], "..", ".."))
 from lib.camera import camera
 from lib.feature import dnn
 from lib.biocryp import binarizers
-from client.constant import keygen_fuzzy_extractor, TEST_USER_ID, FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG
+from client.constant import keygen_fuzzy_extractor, TEST_USER_ID, FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG, FEATURE_EXTRACTOR_DNN_MODEL, FEATURE_EXTRACTOR_FACE_DETECTOR
 from client.adapters import out_database_keyseed
 import cv2
 
@@ -29,8 +29,10 @@ def execute(user_id: str):
     cv2_image_imread = cv2.cvtColor(cv2_image_imread, cv2.COLOR_BGR2RGB)
     print("consent: done capturing.")
 
+    print("consent: model=", FEATURE_EXTRACTOR_DNN_MODEL)
+    print("consent: face detector=", FEATURE_EXTRACTOR_FACE_DETECTOR)
     print("consent: enforce_detection=", FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG)
-    feature_vector, ok = dnn.extract_feature_vector(cv2_image_imread, enforce_detection=FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG)
+    feature_vector, ok = dnn.extract_feature_vector(cv2_image_imread, FEATURE_EXTRACTOR_DNN_MODEL, FEATURE_EXTRACTOR_FACE_DETECTOR, enforce_detection=FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG)
 
     if not ok:
         result = False
