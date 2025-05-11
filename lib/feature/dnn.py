@@ -23,6 +23,7 @@ def extract_feature_vector(
             enforce_detection=enforce_detection,
             detector_backend=face_detector_backend,
             max_faces=1,
+            normalization="Facenet2018"
         )[0]["embedding"]
     except ValueError as e:
         # No face detected

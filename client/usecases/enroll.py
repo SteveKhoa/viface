@@ -13,7 +13,9 @@ from client.constant import (
     ENROLL_FROM_STATIC_DATA_FLAG, 
     TEST_USER_ID, 
     FEATURE_EXTRACTOR_DNN_MODEL, 
-    FEATURE_EXTRACTOR_FACE_DETECTOR)
+    FEATURE_EXTRACTOR_FACE_DETECTOR,
+    FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG,
+)
 from client.adapters import out_database_keyseed
 import cv2
 
@@ -37,7 +39,7 @@ def execute(user_id: str = "test_user") -> bool:
 
     feature_vectors = []
     for im in cv2_image_imreads:
-        feature_vector, ok = dnn.extract_feature_vector(im, FEATURE_EXTRACTOR_DNN_MODEL, FEATURE_EXTRACTOR_FACE_DETECTOR)
+        feature_vector, ok = dnn.extract_feature_vector(im, FEATURE_EXTRACTOR_DNN_MODEL, FEATURE_EXTRACTOR_FACE_DETECTOR, FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG)
 
         if not ok:
             print("enroll: face cannot be detected... skip.")

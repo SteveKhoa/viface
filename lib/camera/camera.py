@@ -17,17 +17,23 @@ def capture_to_cv2_multiple_images():
     """
 
     images = []
-    cap = cv2.VideoCapture(0)
-    while True:
-        ret, frame = cap.read()
-        if not ret:
-            break
-        cv2.imshow("Capture - Press Enter to stop", frame)
-        if cv2.waitKey(1) == 13:  # Enter key
-            break
-        images.append(frame.copy())
-    cap.release()
-    cv2.destroyAllWindows()
+    # cap = cv2.VideoCapture(0)
+
+
+    # while True:
+
+    #     ret, frame = cap.read()
+        
+    #     if not ret:
+    #         break
+    #     cv2.imshow("Capture - Press Enter to stop", frame)
+    #     if cv2.waitKey(1) == 13:  # Enter key
+    #         break
+    #     images.append(frame.copy())
+    # cap.release()
+    # cv2.destroyAllWindows()
+
+    print("capture_to_cv2_multiple_images: not implemented")
     return images
 
 
@@ -43,8 +49,7 @@ def capture_to_cv2_single_image():
         x, y, w, h, ok = dnn.detect_face(frame)
 
         if ok:
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            cv2.putText(frame, "OK", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+            frame = frame[y:y+h, x:x+w]
 
         cv2.imshow("Capture - Press Enter to stop", frame)
 
