@@ -4,7 +4,7 @@
 from deepface import DeepFace  # unifying the interface of Feature Extractor functions
 from PIL.Image import Image
 import numpy as np
-from typing import Union
+from typing import Union, Tuple
 from sklearn.preprocessing import normalize
 
 
@@ -13,23 +13,28 @@ def extract_feature_vector(
     model_name: str = "GhostFaceNet",
     face_detector_backend: str = "ssd",
     enforce_detection: bool = False,
-) -> np.ndarray:
+) -> Tuple[np.ndarray, bool]:
     npimg = _convert_to_np(image)
 
-    embedding = DeepFace.represent(
-        img_path=npimg,
-        model_name=model_name,
-        enforce_detection=enforce_detection,
-        detector_backend=face_detector_backend,
-        max_faces=1,
-    )[0]["embedding"]
+    try:
+        embedding = DeepFace.represent(
+            img_path=npimg,
+            model_name=model_name,
+            enforce_detection=enforce_detection,
+            detector_backend=face_detector_backend,
+            max_faces=1,
+        )[0]["embedding"]
+    except ValueError:
+        # No face detected
+
+        return (None, False)
 
     embedding = np.array(embedding)
     embedding = np.expand_dims(embedding, axis=0)
     embedding = normalize(embedding)
     embedding = np.squeeze(embedding)
 
-    return np.array(embedding)
+    return (np.array(embedding), True)
 
 
 def detect_face(
