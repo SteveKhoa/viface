@@ -26,7 +26,15 @@ def execute(user_id: str = "test_user") -> bool:
 
     cv2_image_imreads = [cv2.cvtColor(cv2_image_imread, cv2.COLOR_BGR2RGB) for cv2_image_imread in cv2_image_imreads]
 
-    feature_vectors = [dnn.extract_feature_vector(im) for im in cv2_image_imreads]
+    feature_vectors = []
+    for im in cv2_image_imreads:
+        feature_vector, ok = dnn.extract_feature_vector(im)
+
+        if not ok:
+            continue
+
+        feature_vectors += [feature_vector]
+
     binarized_feature_vectors = [binarizer.binarise(feat) for feat in feature_vectors]
 
     concatenated_binarized_feature_vectors = b"".join(binarized_feature_vectors)

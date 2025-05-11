@@ -29,7 +29,16 @@ def execute(user_id: str):
     cv2_image_imread = cv2.cvtColor(cv2_image_imread, cv2.COLOR_BGR2RGB)
     print("consent: done capturing.")
 
-    feature_vector = dnn.extract_feature_vector(cv2_image_imread, enforce_detection=FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG)
+    print("consent: enforce_detection=", FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG)
+    feature_vector, ok = dnn.extract_feature_vector(cv2_image_imread, enforce_detection=FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG)
+
+    if not ok:
+        result = False
+        msg = "face cannot be detected"
+        print("consent: result=", result, ", msg=", msg)
+
+        return result, msg
+
     binarized_feature_vector = binarizer.binarise(feature_vector)
 
     result = keygen_fuzzy_extractor.verify(binarized_feature_vector, keyseed)
