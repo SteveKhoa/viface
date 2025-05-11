@@ -63,9 +63,12 @@ class DataLoadImagesByPairForMaskThenLock:
         augmented_base_signup_np_images = augmentation.create_augmented_images(base_signup_np_image)
 
         # Feature extraction
-        base_signup_np_embs = [dnn.extract_feature_vector(augmented_base_signup_np_image, model_name="Facenet512", face_detector_backend="centerface") for augmented_base_signup_np_image in augmented_base_signup_np_images]
-        base_login_np_emb = dnn.extract_feature_vector(base_login_np_image, model_name="Facenet512", face_detector_backend="centerface")
-        false_login_np_emb = dnn.extract_feature_vector(false_login_np_image, model_name="Facenet512", face_detector_backend="centerface")
+        base_signup_np_embs, ok1 = [dnn.extract_feature_vector(augmented_base_signup_np_image, model_name="Facenet512", face_detector_backend="centerface") for augmented_base_signup_np_image in augmented_base_signup_np_images]
+        base_login_np_emb, ok2 = dnn.extract_feature_vector(base_login_np_image, model_name="Facenet512", face_detector_backend="centerface")
+        false_login_np_emb, ok3 = dnn.extract_feature_vector(false_login_np_image, model_name="Facenet512", face_detector_backend="centerface")
+
+        if not (ok1 and ok2 and ok3):
+            raise ValueError("cannot detect face")
 
         return (
             base_signup_np_embs,
