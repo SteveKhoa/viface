@@ -3,7 +3,7 @@ import os
 
 sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
-from protocol.opaque_config import SERVER_BASE_URL, ENDPOINT_REGISTRATION_1, ENDPOINT_REGISTRATION_2
+from client.constant import SERVER_BASE_URL, ENDPOINT_REGISTRATION_1, ENDPOINT_REGISTRATION_2
 from lib import opaque
 import base64
 import requests
