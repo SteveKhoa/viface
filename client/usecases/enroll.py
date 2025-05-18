@@ -23,14 +23,19 @@ import cv2
 binarizer = binarizers.Static()
 
 
-def execute(user_id: str = "test_user") -> bool:
+def execute(user_id: str = "test_user", number_enrollment_samples: int = 10) -> bool:
+    print("enroll: enroll from static data flag=", ENROLL_FROM_STATIC_DATA_FLAG)
+
     if ENROLL_FROM_STATIC_DATA_FLAG == "True":
         path_list = os.listdir(ENROLL_FROM_STATIC_DATA_DIR)
         user_id = TEST_USER_ID
 
         cv2_image_imreads = [cv2.imread(os.path.join(ENROLL_FROM_STATIC_DATA_DIR, path)) for path in path_list]
     else:
-        cv2_image_imreads = camera.capture_to_cv2_multiple_images()
+        cv2_image_imreads = []
+        for i in range(number_enrollment_samples):
+            cv2_image_imreads += [camera.capture_to_cv2_single_image()]
+            print(f"enroll: captured enrollment sample {i}/{number_enrollment_samples}.")
 
     cv2_image_imreads = [cv2.cvtColor(cv2_image_imread, cv2.COLOR_BGR2RGB) for cv2_image_imread in cv2_image_imreads]
 

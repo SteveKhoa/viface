@@ -4,6 +4,7 @@ export const STATE_SUCCESS = "state_success";
 export const STATE_FAILED = "state_failed";
 
 export const ACCESS_TOKEN_ENDPOINT = "http://localhost:8080/token";
+export const REGISTER_ENDPOINT = "http://localhost:8080/register";
 
 console.log(import.meta.env.VITE_WEB_TARGET_PAGE)
 export const WEB_TARGET_PAGE = import.meta.env.VITE_WEB_TARGET_PAGE

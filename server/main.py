@@ -12,8 +12,9 @@ from fastapi import FastAPI, Form, Depends
 from fastapi.security import HTTPBearer
 from fastapi.middleware.cors import CORSMiddleware
 from server.constant import SQLITE_PATH, SERVER_SECRET_BASE64, SIGNATURE_PUBLIC_KEY
-from server.usecases import access_token_get_consent, access_token_push
+from server.usecases import access_token_get_consent, access_token_push, user_register
 from lib import opaque
+import time
 
 app = FastAPI()
 
@@ -159,6 +160,8 @@ async def request_token(domain: str, user_id: str):
     Asynchronously create an access token request. The access token request will be pushed back to client via server send event.
     """
 
+    log_time_start = time.time()
+
     json_resp = access_token_get_consent.execute(domain, user_id)
 
     status = json_resp["status"]
@@ -169,7 +172,32 @@ async def request_token(domain: str, user_id: str):
     else:
         access_token = ""
 
+    log_time_end = time.time()
+
+    print("request_token:", log_time_end - log_time_start, "s")
+
     return {"status": status, "msg": msg, "access_token": access_token}
+
+
+@app.get("/register")
+async def register(user_id: str):
+    log_time_start = time.time()
+
+    ok = user_register.execute( user_id)
+
+    if ok:
+        status = "200"
+        msg = "User created successfully"
+    else:
+        status = "500"
+        msg = "Registration failed. Unexpected error on the server"
+
+    log_time_end = time.time()
+
+    print("register:", log_time_end - log_time_start, "s")
+
+    return {"status": status, "msg": msg}
+
 
 
 @app.get("/")

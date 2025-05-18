@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { Box, Typography, Button, Paper, TextField } from "@mui/material";
+import { Box, Typography, Button, Paper, TextField, Stack } from "@mui/material";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import PersonAddAlt1RoundedIcon from "@mui/icons-material/PersonAddAlt1Rounded";
 import {
     ACCESS_TOKEN_ENDPOINT,
     STATE_FAILED,
     STATE_SUCCESS,
     STATE_WAITING,
+    REGISTER_ENDPOINT,
 } from "./config";
 
-const MOCK_DOMAIN = "simpleecommerce.com"
+const MOCK_DOMAIN = "simpleecommerce.com";
 
 const LoginPage = ({ setState, setFailedMsg }) => {
     const [allowSignin, setAllowSignin] = useState(false);
@@ -27,22 +29,40 @@ const LoginPage = ({ setState, setFailedMsg }) => {
                 setState(STATE_SUCCESS);
             } else {
                 setState(STATE_FAILED);
-                setFailedMsg(content.msg)
+                setFailedMsg(content.msg);
+            }
+        })();
+    };
+
+    const register = (userID) => {
+        (async () => {
+            setState(STATE_WAITING);
+
+            const urlWithParams = `${REGISTER_ENDPOINT}?user_id=${userID}`;
+
+            const resp = await fetch(urlWithParams);
+            const content = await resp.json();
+
+            if (content.status == "200") {
+                setState(STATE_SUCCESS);
+            } else {
+                setState(STATE_FAILED);
+                setFailedMsg(content.msg);
             }
         })();
     };
 
     const onInputChange = (event) => {
-        const username = event.target.value
+        const username = event.target.value;
 
-        setUsername(username)
+        setUsername(username);
 
         if (event.target.value.length > 0) {
-            setAllowSignin(true)
+            setAllowSignin(true);
         } else {
-            setAllowSignin(false)
+            setAllowSignin(false);
         }
-    }
+    };
 
     return (
         <Box
@@ -90,28 +110,53 @@ const LoginPage = ({ setState, setFailedMsg }) => {
                     onChange={onInputChange}
                 />
 
-                <Button
-                    variant="contained"
-                    startIcon={<AccountCircleRoundedIcon />}
-                    onClick={() => signIn(MOCK_DOMAIN, username)}
-                    disabled={!allowSignin}
-                    sx={{
-                        backgroundColor: "#2f27ce",
-                        color: "#fbfbfe",
-                        fontWeight: "bold",
-                        borderRadius: "30px",
-                        textTransform: "none",
-                        fontSize: "0.875rem", // Smaller font size
-                        px: 3, // Reduced padding
-                        py: 1, // Reduced padding
-                        "&:hover": {
-                            backgroundColor: "#433bff",
-                        },
-                    }}
-                    fullWidth
-                >
-                    Sign in with ViFace
-                </Button>
+                <Stack spacing={2}>
+                    <Button
+                        variant="contained"
+                        startIcon={<AccountCircleRoundedIcon />}
+                        onClick={() => signIn(MOCK_DOMAIN, username)}
+                        disabled={!allowSignin}
+                        sx={{
+                            backgroundColor: "#2f27ce",
+                            color: "#fbfbfe",
+                            fontWeight: "bold",
+                            borderRadius: "30px",
+                            textTransform: "none",
+                            fontSize: "0.875rem", // Smaller font size
+                            px: 3, // Reduced padding
+                            py: 1, // Reduced padding
+                            "&:hover": {
+                                backgroundColor: "#433bff",
+                            },
+                        }}
+                        fullWidth
+                    >
+                        Sign in with ViFace
+                    </Button>
+
+                    <Button
+                        variant="contained"
+                        startIcon={<PersonAddAlt1RoundedIcon />}
+                        onClick={() => register(username)}
+                        disabled={!allowSignin}
+                        sx={{
+                            backgroundColor: "#2f27ce",
+                            color: "#fbfbfe",
+                            fontWeight: "bold",
+                            borderRadius: "30px",
+                            textTransform: "none",
+                            fontSize: "0.875rem", // Smaller font size
+                            px: 3, // Reduced padding
+                            py: 1, // Reduced padding
+                            "&:hover": {
+                                backgroundColor: "#433bff",
+                            },
+                        }}
+                        fullWidth
+                    >
+                        Create New Account
+                    </Button>
+                </Stack>
             </Box>
         </Box>
     );

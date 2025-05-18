@@ -8,35 +8,6 @@ import time
 from lib.feature import dnn
 
 
-def capture_to_cv2_multiple_images():
-    """
-    Upon triggered, OpenCV webcam API is called to acquire a sequence of images.
-    The capture only stops when user press key "Enter".
-
-    This function then returns that sequences of images via read.
-    """
-
-    images = []
-    # cap = cv2.VideoCapture(0)
-
-
-    # while True:
-
-    #     ret, frame = cap.read()
-        
-    #     if not ret:
-    #         break
-    #     cv2.imshow("Capture - Press Enter to stop", frame)
-    #     if cv2.waitKey(1) == 13:  # Enter key
-    #         break
-    #     images.append(frame.copy())
-    # cap.release()
-    # cv2.destroyAllWindows()
-
-    print("capture_to_cv2_multiple_images: not implemented")
-    return images
-
-
 def capture_to_cv2_single_image():
     cap = cv2.VideoCapture(0)
 
