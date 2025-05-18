@@ -15,6 +15,7 @@ from client.constant import (
     FEATURE_EXTRACTOR_DNN_MODEL, 
     FEATURE_EXTRACTOR_FACE_DETECTOR,
     FEATURE_EXTRACTOR_ENFORCE_DETECTION_FLAG,
+    NUMBER_REQUIRED_INITIAL_SAMPLES
 )
 from client.adapters import out_database_keyseed
 import cv2
@@ -23,7 +24,7 @@ import cv2
 binarizer = binarizers.Static()
 
 
-def execute(user_id: str = "test_user", number_enrollment_samples: int = 10) -> bool:
+def execute(user_id: str = "test_user", number_enrollment_samples: int = NUMBER_REQUIRED_INITIAL_SAMPLES) -> bool:
     print("enroll: enroll from static data flag=", ENROLL_FROM_STATIC_DATA_FLAG)
 
     if ENROLL_FROM_STATIC_DATA_FLAG == "True":
