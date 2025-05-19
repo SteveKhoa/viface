@@ -27,6 +27,8 @@ const LoginPage = ({ setState, setFailedMsg }) => {
 
             if (content.status == "200") {
                 setState(STATE_SUCCESS);
+                localStorage.setItem("accessToken", content.access_token);
+                console.log(content.access_token);
             } else {
                 setState(STATE_FAILED);
                 setFailedMsg(content.msg);
@@ -100,6 +102,10 @@ const LoginPage = ({ setState, setFailedMsg }) => {
                     Our latest biometric authentication technology.
                 </Typography>
 
+                <Typography variant="body1" sx={{ color: "#050315", mb: 4 }}>
+                    Product: Truyen Kieu - NXB Van Hoc - 1999
+                </Typography>
+
                 <TextField
                     label="Username"
                     variant="standard"
@@ -131,7 +137,7 @@ const LoginPage = ({ setState, setFailedMsg }) => {
                         }}
                         fullWidth
                     >
-                        Sign in with ViFace
+                        Purchase with ViFace
                     </Button>
 
                     <Button

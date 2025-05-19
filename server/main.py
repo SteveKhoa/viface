@@ -212,14 +212,16 @@ async def register(user_id: str):
 async def resource(access_token: str):
     log_time_start = time.time()
 
-    data = "You are my TREASURE!"
+    data = "HAiOjk5OTk"  # Random OrderID
 
     try:
         decoded_jwt = jwt.decode(access_token, SERVER_SECRET_BASE64, algorithms=["HS256"])
 
         status = "200"
         msg = "Success"
-    except:
+    except Exception as e:
+        print("resource", e)
+
         status = "401"
         msg = "Unauthorized"
 

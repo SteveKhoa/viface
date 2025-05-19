@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import EastRoundedIcon from "@mui/icons-material/EastRounded";
+import { RESOURCE_ENDPOINT } from "./config";
 
 const SuccessPage = () => {
-    const handleContinue = () => {
-        window.location.assign('https://store.hangdiathoidai.com/');
+    const [message, setMessage] = useState("");
+
+    const fetchResource = () => {
+        const access_token = localStorage.getItem("accessToken");
+
+        (async () => {
+            const urlWithParams = `${RESOURCE_ENDPOINT}?access_token=${access_token}`;
+
+            const resp = await fetch(urlWithParams);
+            const content = await resp.json();
+
+            if (content.status == "200") {
+                setMessage(`Purchase Successful! Your OrderID is ${content.data}!`);
+            } else {
+                setMessage("Purchase Failed.");
+            }
+        })();
     };
+
+    useEffect(() => fetchResource(), []);
 
     return (
         <Box
@@ -46,10 +64,10 @@ const SuccessPage = () => {
                         mb: 2,
                     }}
                 >
-                    You have successfully logged in!
+                    {message}
                 </Typography>
 
-                <Button
+                {/* <Button
                     variant="contained"
                     endIcon={<EastRoundedIcon />}
                     onClick={handleContinue}
@@ -69,7 +87,7 @@ const SuccessPage = () => {
                     fullWidth
                 >
                     Continue
-                </Button>
+                </Button> */}
             </Box>
         </Box>
     );

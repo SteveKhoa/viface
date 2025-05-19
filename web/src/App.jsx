@@ -24,7 +24,7 @@ function App() {
                 <></>
             )}
             {state == STATE_SUCCESS ? (
-                <SuccessPage setState={setState} />
+                <SuccessPage setState={setState}/>
             ) : (
                 <></>
             )}
