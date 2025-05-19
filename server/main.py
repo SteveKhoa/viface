@@ -15,6 +15,7 @@ from server.constant import SQLITE_PATH, SERVER_SECRET_BASE64, SIGNATURE_PUBLIC_
 from server.usecases import access_token_get_consent, access_token_push, user_register
 from lib import opaque
 import time
+import jwt
 
 app = FastAPI()
 
@@ -168,7 +169,15 @@ async def request_token(domain: str, user_id: str):
     msg = json_resp["msg"]
 
     if status == "200":
-        access_token = os.getenv("SERVER_JWT_TEST_ACCESS_TOKEN")
+
+        test_access_token = {
+            "iss": "viface.com",
+            "sub": "viface://testuser",
+            "exp": 9999999999,
+            "scopes": ["catalog:read", "cart:read,write"],
+        }
+
+        access_token = jwt.encode(test_access_token, SERVER_SECRET_BASE64, algorithm="HS256")
     else:
         access_token = ""
 
@@ -183,7 +192,7 @@ async def request_token(domain: str, user_id: str):
 async def register(user_id: str):
     log_time_start = time.time()
 
-    ok = user_register.execute( user_id)
+    ok = user_register.execute(user_id)
 
     if ok:
         status = "200"
@@ -198,6 +207,27 @@ async def register(user_id: str):
 
     return {"status": status, "msg": msg}
 
+
+@app.get("/resource")
+async def resource(access_token: str):
+    log_time_start = time.time()
+
+    data = "You are my TREASURE!"
+
+    try:
+        decoded_jwt = jwt.decode(access_token, SERVER_SECRET_BASE64, algorithms=["HS256"])
+
+        status = "200"
+        msg = "Success"
+    except:
+        status = "401"
+        msg = "Unauthorized"
+
+    log_time_end = time.time()
+
+    print("resource:", log_time_end - log_time_start, "s")
+
+    return {"status": status, "msg": msg, "data": data}
 
 
 @app.get("/")
