@@ -212,6 +212,8 @@ async def register(user_id: str):
 async def resource(access_token: str):
     log_time_start = time.time()
 
+    data = ""
+
     try:
         decoded_jwt = jwt.decode(access_token, SERVER_SECRET_BASE64, algorithms=["HS256"])
 
