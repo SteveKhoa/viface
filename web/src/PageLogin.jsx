@@ -8,6 +8,7 @@ import {
     STATE_SUCCESS,
     STATE_WAITING,
     REGISTER_ENDPOINT,
+    STATE_LOGIN,
 } from "./config";
 
 const MOCK_DOMAIN = "simpleecommerce.com";
@@ -42,15 +43,8 @@ const LoginPage = ({ setState, setFailedMsg }) => {
 
             const urlWithParams = `${REGISTER_ENDPOINT}?user_id=${userID}`;
 
-            const resp = await fetch(urlWithParams);
-            const content = await resp.json();
-
-            if (content.status == "200") {
-                setState(STATE_SUCCESS);
-            } else {
-                setState(STATE_FAILED);
-                setFailedMsg(content.msg);
-            }
+            await fetch(urlWithParams);
+            setState(STATE_LOGIN);
         })();
     };
 
